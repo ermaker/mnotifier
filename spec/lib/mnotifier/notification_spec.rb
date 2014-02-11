@@ -10,7 +10,7 @@ describe 'MNotifier App' do
   include FakeFS::SpecHelpers
 
   def app
-    Sinatra::Application
+    Notification.new
   end
 
   it 'posts notifications' do
