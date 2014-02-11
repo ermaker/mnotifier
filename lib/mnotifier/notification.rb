@@ -3,6 +3,10 @@ require 'digest/sha1'
 
 module MNotifier
   class Notification < Sinatra::Base
+    configure do
+      @@notifications = {}
+    end
+
     get '/notifications' do
       <<-EOS
 <form method=post enctype='multipart/form-data'>
@@ -12,14 +16,15 @@ module MNotifier
       EOS
     end
 
+    get '/notifications/*' do |key|
+      @@notifications[key]
+    end
+
     post '/notifications' do
-      contents = params[:detail]
-      filename = Digest::SHA1.hexdigest(contents)
-      FileUtils.mkdir_p 'notifications', :mode => 0700
-      File.open(File.join('notifications', filename), 'w', 0600) do |f|
-        f << contents
-      end
-      "#{request.url}/#{filename}"
+      value = params[:detail]
+      key = Digest::SHA1.hexdigest(value)
+      @@notifications[key] = value
+      "#{request.url}/#{key}"
     end
   end
 end

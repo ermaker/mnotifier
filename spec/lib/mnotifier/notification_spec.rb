@@ -13,11 +13,13 @@ describe 'MNotifier App' do
     MNotifier::Notification.new
   end
 
-  it 'posts notifications' do
+  it 'posts notifications and gets the notification' do
     post '/notifications', detail: 'detail description'
     last_response.body.should == 'http://example.org/notifications/033d92cc16d782809355e5800042faedf4005641'
     last_response.should be_ok
-    File.should be_exist 'notifications/033d92cc16d782809355e5800042faedf4005641'
-    File.read('notifications/033d92cc16d782809355e5800042faedf4005641').should == 'detail description'
+
+    get '/notifications/033d92cc16d782809355e5800042faedf4005641'
+    last_response.body.should ==  'detail description'
+    last_response.should be_ok
   end
 end
