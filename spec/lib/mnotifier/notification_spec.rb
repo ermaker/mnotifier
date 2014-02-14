@@ -2,12 +2,10 @@ ENV['RACK_ENV'] = 'test'
 
 require 'spec_helper'
 require 'rack/test'
-require 'fakefs/spec_helpers'
-require 'mnotifier/notification'
+require 'mnotifier'
 
 describe 'MNotifier App' do
   include Rack::Test::Methods
-  include FakeFS::SpecHelpers
 
   def app
     MNotifier::Notification.new
